@@ -52,6 +52,7 @@ public class Calculadora {
         numero = operacao.apply(op1, op2);
         operandos.push(numero);
     }
+
     public void soma() {
         executarOperacao((op1, op2) -> op1 + op2);
     }
@@ -75,3 +76,4 @@ public class Calculadora {
         }
         executarOperacao((op1, op2) -> op2 / op1);
     }
+}
