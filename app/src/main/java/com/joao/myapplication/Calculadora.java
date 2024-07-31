@@ -75,3 +75,4 @@ public class Calculadora {
         executarOperacao((op1, op2) -> op2 / op1);
     }
 }
+
