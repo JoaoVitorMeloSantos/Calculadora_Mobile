@@ -1,7 +1,5 @@
 package com.joao.myapplication;
 
-import android.net.wifi.aware.PublishConfig;
-
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Optional;
@@ -77,3 +75,4 @@ public class Calculadora {
         executarOperacao((op1, op2) -> op2 / op1);
     }
 }
+
