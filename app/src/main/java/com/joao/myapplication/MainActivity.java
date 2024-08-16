@@ -78,6 +78,9 @@ public class MainActivity extends AppCompatActivity {
         btnN = findViewById(R.id.btnN);
         display = findViewById(R.id.display);
 
+        display.setFocusable(false);
+        display.setFocusableInTouchMode(false);
+
         btn0.setOnClickListener(onClickNumber("0"));
         btn1.setOnClickListener(onClickNumber("1"));
         btn2.setOnClickListener(onClickNumber("2"));
@@ -88,10 +91,23 @@ public class MainActivity extends AppCompatActivity {
         btn7.setOnClickListener(onClickNumber("7"));
         btn8.setOnClickListener(onClickNumber("8"));
         btn9.setOnClickListener(onClickNumber("9"));
+        btnPoint.setOnClickListener(onClickNumber("."));
+
 
         btnEnter.setOnClickListener(onClickEnter());
         btnClear.setOnClickListener(onClickClear());
         btnDelete.setOnClickListener(onClickDelete());
+
+        btnSum.setOnClickListener(onClickSum());
+        btnSub.setOnClickListener(onClickSub());
+        btnMult.setOnClickListener(onClickMult());
+        btnDiv.setOnClickListener(onClickDiv());
+
+        btnPV.setOnClickListener(onClickSetPV());
+        btnFV.setOnClickListener(onClickCalculateFV());
+        btnPMT.setOnClickListener(onClickSetPMT());
+        btnI.setOnClickListener(onClickSetI());
+        btnN.setOnClickListener(onClickSetN());
 
     }
 
@@ -100,11 +116,23 @@ public class MainActivity extends AppCompatActivity {
             if (calculadora.getModo() == Calculadora.MODO_EXIBINDO) {
                 display.setText("");
             }
-            if (display.getText().toString().contains(".") && num.equals(".")) {
-                return;
+            String currentText = display.getText().toString();
+            if (num.equals(".")) {
+                if (currentText.contains(".")) {
+                    return;
+                }
+                if (currentText.isEmpty()) {
+                    currentText = "0";
+                }
             }
-            display.append(num);
-            calculadora.setNumero(Double.parseDouble(display.getText().toString()));
+            currentText += num;
+            display.setText(currentText);
+            try {
+                calculadora.setNumero(Double.parseDouble(currentText));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+            calculadora.setModo(Calculadora.MODO_EDITANDO);
         };
     }
 
@@ -142,5 +170,86 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
+    public View.OnClickListener onClickSum(){
+        return (v)->{
+            calculadora.soma();
+            display.setText(String.valueOf(calculadora.getNumero()));
+        };
+    }
+
+    public View.OnClickListener onClickSub(){
+        return (v)->{
+            calculadora.subtracao();
+            display.setText(String.valueOf(calculadora.getNumero()));
+        };
+    }
+
+    public View.OnClickListener onClickMult(){
+        return (v)->{
+            calculadora.multiplicacao();
+            display.setText(String.valueOf(calculadora.getNumero()));
+        };
+    }
+
+    public View.OnClickListener onClickDiv(){
+        return (v)->{
+            calculadora.divisao();
+            if (calculadora.getModo() == Calculadora.MODO_ERRO) {
+                display.setText("Erro");
+            } else {
+                display.setText(String.valueOf(calculadora.getNumero()));
+            }
+        };
+    }
+
+    public View.OnClickListener onClickSetPV() {
+        return (v) -> {
+            double value = Double.parseDouble(display.getText().toString());
+            calculadora.setPV(value);
+            display.setText("");
+        };
+    }
+
+    public View.OnClickListener onClickSetI() {
+        return (v) -> {
+            double value = Double.parseDouble(display.getText().toString());
+            calculadora.setI(value);
+            display.setText("");
+        };
+    }
+
+    public View.OnClickListener onClickSetN() {
+        return (v) -> {
+            int value = Integer.parseInt(display.getText().toString());
+            calculadora.setN(value);
+            display.setText("");
+        };
+    }
+
+    public View.OnClickListener onClickSetPMT() {
+        return (v) -> {
+            String currentText = display.getText().toString();
+            double value = 0;
+
+            if (!currentText.isEmpty()) {
+                try {
+                    value = Double.parseDouble(currentText);
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    value = 0; // Define o valor como 0 se houver uma exceção
+                }
+            }
+
+            calculadora.setPMT(value);
+            display.setText("");
+        };
+    }
+
+    public View.OnClickListener onClickCalculateFV() {
+        return (v) -> {
+            double fv = calculadora.calcularFV(calculadora.getPv(), calculadora.getI(), calculadora.getN(), calculadora.getPmt());
+            display.setText(String.valueOf(fv));
+        };
+    }
 
 }
