@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 
 public class Calculadora {
+
     public static final int MODO_EDITANDO = 0;
     public static final int MODO_EXIBINDO = 1;
     public static final int MODO_ERRO = 2;
@@ -73,6 +74,12 @@ public class Calculadora {
             return;
         }
         executarOperacao((op1, op2) -> op2 / op1);
+    }
+
+    public void limpar() {
+        numero = 0;
+        operandos.clear();
+        modo = MODO_EXIBINDO;
     }
 }
 
